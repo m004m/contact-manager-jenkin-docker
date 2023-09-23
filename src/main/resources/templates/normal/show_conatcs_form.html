@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.Thymeleaf.org" th:replace="normal/normal_user_base::Layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<!--<h1>This User show conatact Thymeleaf Testing...</h1>-->
+		
+		<div class="card">
+			<div class="card-body">
+			
+				<h5 class="text-center">Your contacts</h5>
+				
+				<!--This is for the list of data --fragment-->
+				<div id="showshowlistfragment" th:replace="show_list_data::showList('list','/user/show-conact/')"> </div>
+				
+				<!--This is for the paginatoin --fragment-->
+				<!--<div id="showcontactfragment" th:replace="pagination::pagination('pagination','/user/show-conact/')"> </div>-->
+				
+			</div>
+			
+		</div>
+		
+		
+	</section>	
+</body>
+</html>

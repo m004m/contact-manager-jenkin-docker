@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.Thymeleaf.org" th:replace="normal/normal_user_base::Layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<!--<section>
+		<h1>This User Dashboard Thymeleaf Testing...</h1>
+		<h2 th:text="${name}"></h2>
+		
+		<h2 th:text="${user.name}"></h2>
+		<h2 th:text="${user.email}"></h2>
+		<h2 th:text="${user.imageUrl}"></h2>
+		<h2 th:text="${user.aboutUser}"></h2>
+		
+		<div  style="text-align:center;">
+	      <h3>Conatcts Details</h3>
+	    </div>
+	              
+		
+		<div style="text-align:center;" th:each="cnt : ${user.contacts}">
+			<h3>-------------------------------------------------------------------------</h3>
+			<h5  th:text="${cnt.name}"></h5>
+			<h5  th:text="${cnt.secondName}"></h5>
+			<h5  th:text="${cnt.work}"></h5>
+			<h5  th:text="${cnt.email}"></h5>
+			<h5  th:text="${cnt.phone}"></h5>
+			<span th:with="imgurl=${cnt.image}">
+				<img style="width: 3%;" class="" src="..." th:src="@{/images/contact.png}" />
+			</span>
+			<h5  th:text="${cnt.description}"></h5>
+		</div>
+		
+</section>	-->
+	<section class=" bg-sand"> <!--<section class="home-blog bg-sand"> -->
+    <div class="container">
+		
+		<!-- section title ends -->
+		<div class="row ">
+			<div class="col-md-6">
+				<div class="media blog-media">
+				  <a href="blog-post-left-sidebar.html"><img class="d-flex"  th:src="@{/images/d1.png}"  alt="Generic placeholder image"></a> <!--src="https://www.bootdey.com/image/350x380/6495ED/000000"-->
+				  <div class="circle">
+				  	<h5 class="day">14</h5>
+				  	<span class="month">sep</span>
+				  </div>
+				  <div class="media-body">
+				    <a href=""><h5 class="mt-0">Standard Blog Post</h5></a>
+				    Sodales aliquid, in eget ac cupidatat velit autem numquam ullam ducimus occaecati placeat error.
+				    <a href="blog-post-left-sidebar.html" class="post-link">Read More</a>
+				    <ul>
+				    	<li>by: Admin</li>
+				    	<li class="text-right"><a href="blog-post-left-sidebar.html">07 comments</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="media blog-media">
+				  <a href="blog-post-left-sidebar.html"><img class="d-flex"  th:src="@{/images/d2.png}"  alt="Generic placeholder image"></a> <!--src="https://www.bootdey.com/image/350x380/FFB6C1/000000"-->
+				  <div class="circle">
+  				  	<h5 class="day">12</h5>
+  				  	<span class="month">sep</span>
+  				  </div>
+				  <div class="media-body">
+				    <a href=""><h5 class="mt-0">perferendis labore</h5></a>
+				    Sodales aliquid, in eget ac cupidatat velit autem numquam ullam ducimus occaecati placeat error.
+				    <a href="blog-post-left-sidebar.html" class="post-link">Read More</a>
+				    <ul>
+				    	<li>by: Admin</li>
+				    	<li class="text-right"><a href="blog-post-left-sidebar.html">04 comments</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="media blog-media">
+				  <a href="blog-post-left-sidebar.html"><img class="d-flex" th:src="@{/images/d3.png}"   alt="Generic placeholder image"></a> <!--src="https://www.bootdey.com/image/350x380/FF7F50/000000"-->
+				  <div class="circle">
+  				  	<h5 class="day">09</h5>
+  				  	<span class="month">sep</span>
+  				  </div>
+				  <div class="media-body">
+				    <a href=""><h5 class="mt-0">deleniti incdunt magni</h5></a>
+				    Sodales aliquid, in eget ac cupidatat velit autem numquam ullam ducimus occaecati placeat error.
+				    <a href="blog-post-left-sidebar.html" class="post-link">Read More</a>
+				    <ul>
+				    	<li>by: Admin</li>
+				    	<li class="text-right"><a href="blog-post-left-sidebar.html">10 comments</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="media blog-media">
+				  <a href="blog-post-left-sidebar.html"><img class="d-flex" th:src="@{/images/d4.png}"  alt="Generic placeholder image"></a> <!--src="https://www.bootdey.com/image/350x380/008B8B/000000"-->
+				  <div class="circle">
+  				  	<h5 class="day">04</h5>
+  				  	<span class="month">sep</span>
+  				  </div>
+				  <div class="media-body">
+				    <a href=""><h5 class="mt-0">Explicabo magnam </h5></a>
+				    Sodales aliquid, in eget ac cupidatat velit autem numquam ullam ducimus occaecati placeat error.
+				    <a href="blog-post-left-sidebar.html" class="post-link">Read More</a>
+				    <ul>
+				    	<li>by: Admin</li>
+				    	<li class="text-right"><a href="blog-post-left-sidebar.html">06 comments</a></li>
+				    </ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+		
+</body>
+</html>

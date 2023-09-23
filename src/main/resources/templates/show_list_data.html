@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.Thymeleaf.org" th:replace="normal/show_conatcs_form::Layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="showlistfragment" th:fragment="showList(list,url)">
+	
+		<!--<h3 th:text="${url}"></h3>-->
+		
+		<div class="container mt-3 mb-4">
+			<div class="col-lg-12 mr-1 ml-1 mt-4 mt-lg-0">
+			    <div class="row">
+					
+						
+			      <div class="col-md-12">
+					  
+					<div th:if="${session.message}">
+						<div th:classappend="${session.message.type}" class="alert msg text-center" role="alert">
+							<span th:text="${session.message.content}"></span>
+						</div>
+						<!--<th:block th:text="${#session.removeAttribute('message')}"></th:block> old way-->
+						<th:block th:text="${@sessionHelperClass.removeMessageFromSession()}"></th:block> <!--this SessionHelperClass class name to use we need fllow the camel case sessionHelperClass-->
+					</div>	
+					
+					
+			        <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+			          <table class="table manage-candidates-top mb-0">
+			           
+			            <thead>
+			              <tr>
+			                <th>Candidate Details</th>
+			                <th class="text-center">Status</th>
+			                <th class="action text-right">Action</th>
+			              </tr>
+			            </thead>
+			            
+			          <!--  <h3> <span th:text="${#lists.size(listContacts.content)}"/></h3>-->
+			            
+			            <tbody th:if="${#lists.size(listContacts.content) != 0}">
+							
+			              <tr th:each="c : ${listContacts}" class="candidates-list">
+			                <td th:if="${c}" class="title">
+			                  <div class="thumb">
+			                    <!--<img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">-->
+			                    
+			                    <img class="img-fluid" th:src="@{'/images/' + ${c.image}}" alt="">
+			                    
+			                  </div>
+			                  <div class="candidate-list-details">
+			                    <div class="candidate-list-info">
+			                      <div class="candidate-list-title">
+			                        <h5 class="mb-0"><a th:href="@{${url} +'contact/'+ ${c.cId} +'/'+${currentPage}}" th:text="${c.name}" href="#">Brooke Kelly</a></h5>
+			                      </div>
+			                      <div class="candidate-list-option">
+									<ul class="list-unstyled">
+			                          <li><i class="fas fa-id-card"></i></i> <span th:text="${'SCM'+c.cId}"></span></li>
+			                        </ul>  
+			                        <ul class="list-unstyled">
+			                          <li><i class="fas fa-suitcase"></i> <span th:text="${c.work}"></span></li>
+			                          <li><i class="fas fa-map-marker-alt pr-1"></i> Rolling Meadows, IL 60008</li>
+			                        </ul>
+			                        <ul class="list-unstyled">
+			                          <li><i class="fas fa-envelope"></i> <span th:text="${c.email}"></span></li>
+			                          <li><i class="fas fa-phone"></i></i> <span th:text="${c.phone}"></span></li>
+			                        </ul>
+			                      </div>
+			                    </div>
+			                  </div>
+			                </td>
+			                <td class="candidate-list-favourite-time text-center">
+			                  <a class="candidate-list-favourite order-2 text-danger" href="#"><i class="fas fa-heart"></i></a>
+			                  <span class="candidate-list-time order-1">favrite</span>
+			                </td>
+			                <td>
+			                  <ul class="list-unstyled mb-0 d-flex justify-content-end">
+			                    <li><a th:href="@{${url} +'contact/'+ ${c.cId} +'/'+${currentPage}}" href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="view"><i class="far fa-eye"></i></a></li>
+			                   <!-- <li>
+									<form action="#" th:action="@{'/user/process-addconact/'+${c.cId}+'/'+${currentPage}}"   method="post">
+										<button style="border: none;background: white;" type="submit">
+											<a href="#" class="text-info" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											th:href="@{${url} +'contact/'+ ${c.cId}}"
+										</button>
+									</form>
+								</li>-->
+			                    <li><a  href="#" th:onclick="|deleteContact(${c.cId},${currentPage})|" class="text-danger" data-toggle="tooltip" title="" data-original-title="Delete"><i class="far fa-trash-alt"></i></a></li>
+			                    <!--th:href="@{${url} +'delete-contact/'+ ${c.cId} +'/'+${currentPage}}"-->
+			                  </ul>
+			                </td>
+			              </tr>
+			             
+			            </tbody>
+			          
+			           <tbody th:unless="${#lists.size(listContacts.content) != 0}">
+						   <tr><td class="text-center"><h3>No contacts availabe</h3></td></tr>
+					   </tbody>
+			            
+			          </table>
+			        </div>
+			       
+			        <!--This is for the paginatoin --fragment-->
+			        <div th:if="${#lists.size(listContacts.content) != 0}"> 
+						<div  class="container mt-3 " id="showcontactfragment" th:replace="pagination::pagination('pagination',${url})"> </div>
+					</div>
+					
+					
+			      </div>
+			    </div>
+			  </div>
+		</div>
+
+		<!--old code for data list-->
+		<!--		
+				
+				list of conatcs details
+				<table class="table">
+				 	
+				  <thead class="thead-light">
+				    <tr>
+					  <th style="width:200px" class="text-left" scope="col"><span>&nbsp;&nbsp;&nbsp;</span><i class="fas fa-id-card"></i>  </th>
+					  
+				      <th class="text-center" scope="col"><i class="fas fa-id-card"></i> Id </th>
+				      <th class="text-center" scope="col"><i class="fas fa-user-circle"></i> Name</th>
+				      <th class="text-center" scope="col"><i class="fas fa-envelope"></i> Email</th>
+				      <th class="text-center" scope="col"><i class="fas fa-suitcase"></i> Work</th>
+				      <th class="text-center" scope="col"><i class="fas fa-phone"></i> Phone</th>
+				      <th class="text-center" scope="col"><i class="fa fa-bars" aria-hidden="true"></i> Actions</th>
+				    </tr>
+				  </thead>
+				  
+				  <tbody>
+				    <tr th:each="c : ${listContacts}">
+						
+					  <td class="text-left" >
+						   <img  class="conact-show-profpic" src="..." th:src="@{'/images/' + ${c.image}}" />
+						  <span  th:text="${'CM'+c.cId}" ></span>
+						  
+					  </td> 
+					  	
+				      <td class="text-center" scope="row" th:text="${'CM'+c.cId}">1</td>
+				      
+				      <td class="text-center" >
+						   <img style="width: 8%;" class="" src="..." th:src="@{/images/contact.png}" />
+						  <span  th:text="${c.name}" ></span>
+						  
+					  </td> 
+					  
+				      <td class="text-center" th:text="${c.email}"></td>
+				      <td class="text-center" th:text="${c.work}"></td>
+				      <td class="text-center" th:text="${c.phone}"></td>
+				      <td>
+						 <div class="text-center"> 
+						 <span style="color:orangered;"><i class="fa fa-trash" aria-hidden="true"></i></span> 
+						 <span>&nbsp;</span> added just for space
+						 <span style="color:skyblue;" ><i class="fa fa-pencil" aria-hidden="true"></i></span>
+						 </div> 
+					  </td>
+				    </tr>
+				    
+				  </tbody>
+				</table>
+		-->
+		
+		
+	</div>
+</body>
+</html>	

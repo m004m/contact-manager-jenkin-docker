@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.Thymeleaf.org" th:replace="base::Layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section >
+		<!--<h1>This SignUp Page Thymeleaf Testing...</h1>-->
+		<!--<h2 th:text="${pageName}"></h2>-->
+		<div class="container my-page-register ">
+			
+			<div class="row">
+				
+				<!-- adding slidebar fragment to base html-->
+				<div class="col-md-8" >
+					<div id="baseslidebarfragment" th:replace="slidebar::slidebar('myslidebar')"/>	
+				</div>
+    			
+				<div class="col-md-4">	
+				<!-- if dont slide bar un comment below div and comment above slide bar adding fragment code-->
+				<!--<div class="col-md-6 offset-md-3">-->	
+					
+					<!--<h1 class="text-center">Register Here</h1>-->
+					<div class="my-card-register">
+						
+						<!--Showing Error Message-->
+						<div  th:if="${session.message}" th:classappend="${session.message.type}" class="alert " role="alert">
+						  <span th:text="${session.message.content}"></span>
+						 <!-- <th:block th:text="${#session.removeAttribute('message')}"></th:block>-->
+						</div>
+						
+						<!--Adding Title Dynamically here-->
+						<h5 class="text-center"><span th:text="${pageName }+' Here'"></span></h5> 
+						
+						<!--Forms Starts here -->
+						<form novalidate action="" th:action="@{/doRegister}" method="post" th:object="${user}" >
+							
+							
+							<!--Name field-->
+							<!--th:classappend="${#fields.hasErrors('name') ? 'is-invalid':''}"
+ 							<div class="invalid-feedback " th:each="e : ${#fields.errors('name')" th:text="${e}">
+							</div>-->
+							
+							<div class="form-group">
+							    <label for="name-field">Name:</label>
+							    <input 
+							    	type="text" 
+							    	name="name"
+							    	class="form-control"
+							    	th:classappend="${#fields.hasErrors('name') ? 'is-invalid':''}"
+							    	id="name-field" 
+							    	aria-describedby="NamelHelp" 
+							    	placeholder="Enter your name here"
+							    	th:value="${user.name}"
+							    	
+							    />
+								<span class="invalid-feedback " th:each="e : ${#fields.errors('name')}" th:text="${e}">
+								</span>
+							</div>
+							<!--Email field-->
+							<div class="form-group">
+							    <label for="email-field">Email:</label>
+							    <input 
+							    	type="email" 
+							    	class="form-control" 
+							    	id="email-field" 
+							    	aria-describedby="emailHelp" 
+							    	placeholder="Enter your email here" 
+							    	
+							    	th:value="${user.email}"
+							    	name="email"
+							    />
+							</div>
+							
+							
+							<!--Password field-->
+							<div class="form-group">
+							    <label for="password-field">Password:</label>
+							    <input 
+							    	type="password" 
+							    	class="form-control" 
+							    	id="password-field" 
+							    	aria-describedby="passwordHelp" 
+							    	placeholder="Enter your password here" 
+							    	
+							    	name="password"
+							    />
+							</div>
+							
+							<!--About -->
+							<div class="form-group">
+								<label for="textarea-field">About:</label>
+								<textarea
+									class="form-control" 
+									id="textarea-field" 
+									rows="2"
+									placeholder="Enter somthing about yourself here" 
+									th:text="${user.aboutUser}"
+									name="aboutUser"
+								></textarea>
+							</div>	
+							
+							<!-- terms and condition -->
+							<div class="form-group form-check">
+							    <input 
+							    	type="checkbox" 
+							    	class="form-check-input" 
+							    	id="checkbox-field" 
+							    	aria-describedby="checkboxHelp"  
+							    	
+							    	name="agreement"
+							    />
+							    <label for="checkbox-field">Accept terms and condition</label>
+							</div>	
+							
+							
+							<!--adding button-->
+							<div class="container text-center" >
+								<button 
+									class="btn bg-btn-primary btn-sm"
+									type="submit"
+									>
+									Submit
+								</button>
+								<button 
+									class="btn btn-warning btn-sm"
+									type="reset"
+									>
+									Reset
+								</button>
+								
+							</div>
+							
+							
+						</form>
+						
+					</div>	
+					
+				</div>
+	
+			</div>
+		</div>
+	</section>	
+</body>
+</html>

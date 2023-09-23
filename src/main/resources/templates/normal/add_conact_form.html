@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.Thymeleaf.org" th:replace="normal/normal_user_base::Layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<!--<h1>This User Dashboard-Add conatact Thymeleaf Testing...</h1>-->
+		
+		<div class="card "><!--mr-3-->
+			
+			<div class="card-body">
+			
+				<h5 class="text-center"><i class="fas fa-plus"></i> <span th:text="${pageHeading}"></span></h5>
+				
+				
+				<div class="container-fluid mt-1">
+			
+					
+					<div class="row">
+			
+						<div class="col-md-8 offset-md-2">
+							
+							<div th:if="${session.message}">
+								<div th:classappend="${session.message.type}" class="alert msg text-center" role="alert">
+  									<span th:text="${session.message.content}"></span>
+								</div>
+								<!--<th:block th:text="${#session.removeAttribute('message')}"></th:block> old way-->
+								<th:block th:text="${@sessionHelperClass.removeMessageFromSession()}"></th:block> <!--this SessionHelperClass class name to use we need fllow the camel case sessionHelperClass-->
+								
+							</div>
+							
+							<form class="mt-2" action="#" th:action="@{'/user/process-addconact?currentPageNo='+${updateCurPageNo}+'&cId='+${contact.cId}}" th:object="${contact}" enctype="multipart/form-data" method="post">
+								
+								<!--<input type="hidden" name="cId" th:value="${contact.cId}">-->
+								<!--First name-->
+								<div class="input-group mt-3">
+									<div class="input-group-prepend">
+										<div class="input-group-text ">
+											<!--<i class="fa fa-plus"></i>-->
+											<i class="fas fa-user-alt"></i>
+										</div>
+									</div>
+									<input 
+										type="text" 
+										id="firstName"
+										name="name"
+										placeholder="Eneter your name here"
+										class="form-control"
+										required
+										th:value="${contact.name}"
+									/>
+								</div>
+								
+								<!--second name-->
+								<div class="input-group mt-3">
+									<div class="input-group-prepend">
+										<div class="input-group-text ">
+											<i class="fas fa-user-alt"></i>
+										</div>
+									</div>
+									<input 
+										type="text" 
+										id="lastName"
+										name="secondName"
+										placeholder="Eneter your second name here"
+										class="form-control"
+										th:value="${contact.secondName}"
+									/>
+								</div>
+								
+								<!--phone name-->
+								<div class="input-group mt-3">
+									<div class="input-group-prepend">
+										<div class="input-group-text ">
+											<i class="fa fa-phone"></i>
+										</div>
+									</div>
+									<input 
+										type="number" 
+										id="phone"
+										name="phone"
+										placeholder="Eneter phone number here"
+										class="form-control"
+										required
+										min="10"
+										th:value="${contact.phone}"
+										
+									/>
+								</div>
+								
+								<!--Email field-->
+								<div class="input-group mt-3">
+									<div class="input-group-prepend">
+										<div class="input-group-text ">
+											@
+										</div>
+									</div>
+									<input 
+										type="email" 
+										id="email"
+										name="email"
+										placeholder="Eneter email here"
+										class="form-control"
+										required
+										th:value="${contact.email}"
+									/>
+								</div>
+								
+								<!--Work field-->
+								<div class="input-group mt-3">
+									<div class="input-group-prepend">
+										<div class="input-group-text ">
+											<i class="fa fa-suitcase"></i>
+										</div>
+									</div>
+									<input 
+										type="text" 
+										id="work"
+										name="work"
+										placeholder="Eneter work here"
+										class="form-control"
+										required
+										th:value="${contact.work}"
+									/>
+								</div>
+								
+								<!--Description here-->
+								<div class="form-group mt-3">
+									<textarea
+										rows="10"
+										id="my-description"
+										name="description"
+										placeholder="Eneter Description here"
+										class="form-control"
+										th:text="${contact.description}"
+									></textarea>
+								</div>
+								
+								<!--Conact image-->
+								<div th:if="${contact.image}">
+									 <img  style="width: 100px;height: 100px; " class="img-fluid conact-single-profpic  " th:src="@{'/images/' + ${contact.image}}" alt="">
+									 <p class="text-secondary">Current profile picture, please choose below in case you want replace</p>
+								</div>
+								<div class="form-group mt-1 custom-file">
+									<input 
+										type="file" 
+										id="image"
+										name="image"
+										class="form-control "
+										th:value="'/images/'+${contact.image}"
+										
+									/>
+								</div>
+								
+								<!--Save conact button-->
+								<div class="form-group mt-3 ">
+									<button class="btn btn-primary">Save Contact </button>
+								</div>
+								
+								
+							</form>
+			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+		
+		
+	</section>	
+</body>
+</html>

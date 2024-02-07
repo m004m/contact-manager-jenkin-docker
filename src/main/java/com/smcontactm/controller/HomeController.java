@@ -5,12 +5,24 @@ package com.smcontactm.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.smcontactm.model.AuthResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,8 +40,11 @@ import com.smcontactm.repository.UserRepository;
 
 
 
+//@EnableOAuth2Sso
 @Controller
 public class HomeController {
+
+	private final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -149,13 +164,38 @@ public class HomeController {
 		}
 		
 	}
-	
+
+
 	@GetMapping("/getLoginPage")
 	public String getLoginPage(Model model) {
 		
 		model.addAttribute("title","Login -Conatct Manger Page");
 		model.addAttribute("name","Durgi About name");
 		return "login";
+	}
+
+	@GetMapping("/login")
+	public ResponseEntity<AuthResponse> login(
+			@RegisteredOAuth2AuthorizedClient("okta") OAuth2AuthorizedClient client,
+			@AuthenticationPrincipal OidcUser user,
+			Model model
+	){
+
+		logger.info("user email id : {}",user.getEmail());
+
+		AuthResponse authResponseBuilder = AuthResponse.builder()
+				.userId(user.getEmail())
+				.accessToken(client.getAccessToken().getTokenValue())
+				.refreshToken(Objects.requireNonNull(client.getRefreshToken()).getTokenValue())
+				.expireAt(Objects.requireNonNull(client.getAccessToken().getExpiresAt()).getEpochSecond())
+				.authorities(user.getAuthorities().stream().map(GrantedAuthority::getAuthority
+				).collect(Collectors.toList())).build();
+
+		logger.info("Auth Response console: {}",authResponseBuilder);
+//		if(authResponseBuilder.getUserId() != null){
+//			return "redirect:/user/index";
+//		}
+		return new ResponseEntity<>(authResponseBuilder, HttpStatus.OK);
 	}
 	
 }

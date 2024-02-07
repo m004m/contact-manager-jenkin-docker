@@ -12,11 +12,13 @@ import java.security.Principal;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.smcontactm.service.CloudinaryImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -49,6 +51,9 @@ public class UserController {
 	
 	@Autowired
 	private ContactRepository contactRepository;
+
+	@Autowired
+	private CloudinaryImageService cloudinaryImageService;
 	
 	//@Autowired
 	//private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -104,19 +109,19 @@ public class UserController {
 	
 	//process-addconact save and update contact form
 	@PostMapping("/process-addconact")
-	public String doRegister(@Valid @ModelAttribute  Contact contactModel,BindingResult result, 
-			@RequestParam("currentPageNo") String currentPageNo,
-			@RequestParam("cId") Integer cId,
-			@RequestParam("image") MultipartFile file,Principal principal,Model model,HttpSession session) throws IOException {
-		
-		
+	public String doRegister(@Valid @ModelAttribute  Contact contactModel,BindingResult result,
+							 @RequestParam("currentPageNo") String currentPageNo,
+							 @RequestParam("cId") Integer cId,
+							 @RequestParam("image") MultipartFile file,Principal principal,Model model,HttpSession session) throws IOException {
+
+
 		try (Reader reader = new InputStreamReader(file.getInputStream())){
-			
+
 			//final String path_dic = "C:\\Users\\91889\\Documents\\STS-NEW\\smart-contactmanger\\src\\main\\resources\\static\\db-images"+File.separator;
-			String orginalFileNameWithTime ="";
+			//String orginalFileNameWithTime ="";
 			User user = this.userRepository.getUserByUserName(principal.getName());
 			Contact oldContact = null;
-			
+
 			// for update case
 			if(cId != null && cId != 0) {
 				Optional<Contact> optionalContact = this.contactRepository.findById(cId);
@@ -125,25 +130,36 @@ public class UserController {
 				}
 				contactModel.setcId(cId);
 			}
-			
-			
+
+
 			//file processing code first save file then save user details
 			if(!file.isEmpty()) {
-				Clock clock = Clock.systemDefaultZone();
-				long milliSeconds=clock.millis();
-				System.out.println(milliSeconds);
-				orginalFileNameWithTime = milliSeconds+"-SCM"+user.getId()+"-"+file.getOriginalFilename();
-				contactModel.setImage(orginalFileNameWithTime);
-				
-                //new Way
-               File saveFileAbsPath = new ClassPathResource("static/images").getFile(); //gives abs path till static/db-images
-               if(oldContact != null && !oldContact.getImage().isEmpty() && !oldContact.getImage().equalsIgnoreCase("contact.png")) {// for update case delete old file 
-					File deleteFile = new File(saveFileAbsPath, oldContact.getImage());
-					deleteFile.delete();
+				//		Clock clock = Clock.systemDefaultZone();
+				//		long milliSeconds=clock.millis();
+				//		System.out.println(milliSeconds);
+				//		orginalFileNameWithTime = milliSeconds+"-SCM"+user.getId()+"-"+file.getOriginalFilename();
+				//		contactModel.setImage(orginalFileNameWithTime);
+
+				//new Way
+				//     File saveFileAbsPath = new ClassPathResource("static/images").getFile(); //gives abs path till static/db-images
+				//     if(oldContact != null && !oldContact.getImage().isEmpty() && !oldContact.getImage().equalsIgnoreCase("contact.png")) {// for update case delete old file
+				//			File deleteFile = new File(saveFileAbsPath, oldContact.getImage());
+				//			deleteFile.delete();
+				//		}
+				//       Path path = Paths.get(saveFileAbsPath.getAbsolutePath()+File.separator+orginalFileNameWithTime);//creating path abspath+filename to write file to with Oeg img name adding miisec for unique
+				//       Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);//file will copy specied directory with orginalnane+milsec
+
+				if(oldContact != null && !oldContact.getImage().isEmpty() && !oldContact.getImage().equalsIgnoreCase("contact.png")
+						&& oldContact.getCloudinaryImgToken() != null) {// for update case delete old file
+					this.cloudinaryImageService.delete(oldContact.getCloudinaryImgToken());
+
 				}
-                Path path = Paths.get(saveFileAbsPath.getAbsolutePath()+File.separator+orginalFileNameWithTime);//creating path abspath+filename to write file to with Oeg img name adding miisec for unique
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);//file will copy specied directory with orginalnane+milsec
-                
+				Map<?, ?> map = this.cloudinaryImageService.upload(file);
+				if(!map.isEmpty() && map.get("secure_url") != null) {
+					contactModel.setImage((String) map.get("secure_url"));
+					contactModel.setCloudinaryImgToken((String) map.get("public_id"));
+				}
+
 
 			}else {
 				System.out.println("File is empty please select the file");
@@ -154,30 +170,30 @@ public class UserController {
 				//session.setAttribute("message", new MessageClass("File is empty please select the file !!", "alert-danger"));
 				//return "normal/add_conact_form";
 			}
-			
+
 			contactModel.setUser(user);
-			
+
 			user.getContacts().add(contactModel);
 			User userResult = this.userRepository.save(user);
 			System.out.println(contactModel);
 			if(userResult != null) {
 				session.setAttribute("message", new MessageClass("Contact saved successfully !!", "alert-success"));
 			}
-			
+
 			if(cId != null && cId != 0) {
 				return "redirect:/user/show-conact/contact/"+cId+"/"+currentPageNo;
 			}else {
 				model.addAttribute("pageHeading","Add Contact");
 				model.addAttribute("contact", new Contact());
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.setAttribute("message", new MessageClass("Something went Wrong !!", "alert-danger"));
 		}
-		
+
 		return "normal/add_conact_form";
-		
+
 	}
 	
 	//get contacts list with pagination
@@ -406,57 +422,65 @@ public class UserController {
 				@RequestParam("imageUrl") MultipartFile file,
 				Principal principal,
 				Model model,HttpSession session) {
-			
-				try {
-					System.out.println(userModel);
-					model.addAttribute("title","Update -User Page");
-					model.addAttribute("pageName","Update-User");
-					
-					User savedUser = userRepository.getUserByUserName(principal.getName());
-					
-					
-					if(userModel.getCity() != null && !userModel.getCity().isEmpty()) {
-						savedUser.setCity(userModel.getCity());
+
+
+
+			try {
+				System.out.println(userModel);
+				model.addAttribute("title","Update -User Page");
+				model.addAttribute("pageName","Update-User");
+
+				User savedUser = userRepository.getUserByUserName(principal.getName());
+
+
+				if(userModel.getCity() != null && !userModel.getCity().isEmpty()) {
+					savedUser.setCity(userModel.getCity());
+				}
+				if(userModel.getState() != null && !userModel.getState().isEmpty() ) {
+					savedUser.setState(userModel.getState());
+				}
+				if(userModel.getPhone() != null && !userModel.getPhone().isEmpty()) {
+					savedUser.setPhone(userModel.getPhone());
+				}
+				if(userModel.getWork() != null && !userModel.getWork().isEmpty()) {
+					savedUser.setWork(userModel.getWork());
+				}
+
+				//userModel.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
+
+				String orginalFileNameWithTime = "";
+				if(!file.isEmpty()) {
+					//Clock clock = Clock.systemDefaultZone();
+					//long milliSeconds=clock.millis();
+					//System.out.println(milliSeconds);
+					//orginalFileNameWithTime = milliSeconds+"-SCM-U"+userModel.getId()+"-"+file.getOriginalFilename();
+					//savedUser.setImageUrl(orginalFileNameWithTime);
+
+					//new Way
+					//File saveFileAbsPath = new ClassPathResource("static/images").getFile(); //gives abs path till static/db-images
+					//if(!savedUser.getImageUrl().isEmpty() && !savedUser.getImageUrl().equalsIgnoreCase("contact.png")) {// for update case delete old file
+					//	File deleteFile = new File(saveFileAbsPath, savedUser.getImageUrl());
+					//	deleteFile.delete();
+					//}
+					//Path path = Paths.get(saveFileAbsPath.getAbsolutePath()+File.separator+orginalFileNameWithTime);//creating path abspath+filename to write file to with Oeg img name adding miisec for unique
+					//Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);//file will copy specied directory with orginalnane+milsec
+
+					//saving image file in the cloud couldniary
+					Map<?, ?> map = this.cloudinaryImageService.upload(file);
+					if(!map.isEmpty() && map.get("secure_url") != null) {
+						savedUser.setImageUrl((String) map.get("secure_url"));
 					}
-					if(userModel.getState() != null && !userModel.getState().isEmpty() ) {
-						savedUser.setState(userModel.getState());
-					}
-					if(userModel.getPhone() != null && !userModel.getPhone().isEmpty()) {
-						savedUser.setPhone(userModel.getPhone());
-					}
-					if(userModel.getWork() != null && !userModel.getWork().isEmpty()) {
-						savedUser.setWork(userModel.getWork());
-					}
-					
-					//userModel.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
-					
-					String orginalFileNameWithTime = "";
-					if(!file.isEmpty()) {
-						Clock clock = Clock.systemDefaultZone();
-						long milliSeconds=clock.millis();
-						System.out.println(milliSeconds);
-						orginalFileNameWithTime = milliSeconds+"-SCM-U"+userModel.getId()+"-"+file.getOriginalFilename();
-						savedUser.setImageUrl(orginalFileNameWithTime);
-						
-		                //new Way
-		               File saveFileAbsPath = new ClassPathResource("static/images").getFile(); //gives abs path till static/db-images
-		               if(!savedUser.getImageUrl().isEmpty() && !savedUser.getImageUrl().equalsIgnoreCase("contact.png")) {// for update case delete old file 
-							File deleteFile = new File(saveFileAbsPath, savedUser.getImageUrl());
-							deleteFile.delete();
-						}
-		                Path path = Paths.get(saveFileAbsPath.getAbsolutePath()+File.separator+orginalFileNameWithTime);//creating path abspath+filename to write file to with Oeg img name adding miisec for unique
-		                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);//file will copy specied directory with orginalnane+milsec
-		                
-	
-					}else {
-						System.out.println("File is empty please select the file");
-						
-						//session.setAttribute("message", new MessageClass("File is empty please select the file !!", "alert-danger"));
-						//return "normal/add_conact_form";
-					}
-					
+
+
+				}else {
+					System.out.println("File is empty please select the file");
+
+					//session.setAttribute("message", new MessageClass("File is empty please select the file !!", "alert-danger"));
+					//return "normal/add_conact_form";
+				}
+
 					/*
-					
+
 					if(result.hasErrors()) {
 						System.out.println("Error CustThymeleaf"+result.toString());
 						model.addAttribute("user",userModel);
@@ -467,27 +491,28 @@ public class UserController {
 							fielderror.put(error.getField(), error.getDefaultMessage());
 							errorMsg = errorMsg + error.getDefaultMessage();
 						}
-						
+
 						model.addAttribute("user",userModel);
 						session.setAttribute("message", new MessageClass(errorMsg, "alert-danger"));
-						
+
 						return  "signup";
 					} */
-					
-					User userResult = this.userRepository.save(savedUser);
-					if(userResult != null) {
-						session.setAttribute("message", new MessageClass("Successfully updated !!", "alert-success"));
-					}
-					model.addAttribute("user",userResult);
-					return "normal/user-setting";
-				
-				} catch (Exception e) {
-					e.printStackTrace();
-					model.addAttribute("user",userModel);
-					session.setAttribute("message", new MessageClass("Something went Wrong !!", "alert-danger"));
-					return "normal/user-setting";
+
+				User userResult = this.userRepository.save(savedUser);
+				if(userResult != null) {
+					session.setAttribute("message", new MessageClass("Successfully updated !!", "alert-success"));
 				}
-			
+				model.addAttribute("user",userResult);
+				return "normal/user-setting";
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				model.addAttribute("user",userModel);
+				session.setAttribute("message", new MessageClass("Something went Wrong !!", "alert-danger"));
+				return "normal/user-setting";
+			}
+
+
 		}
 	
 }

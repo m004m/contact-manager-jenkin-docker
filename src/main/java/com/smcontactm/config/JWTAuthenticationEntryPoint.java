@@ -18,7 +18,7 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		 response.sendError(401,"unauthorized request please check");
+		response.sendError(401,"unauthorized request please check");
 		  //response.sendRedirect("http://localhost:6200/getLoginPage");
 		 if (request != null) {
 			 String url = ((HttpServletRequest)request).getRequestURL().toString();

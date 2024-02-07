@@ -46,7 +46,7 @@
 	    
 	      <li class="nav-item dropdown">
 	        <a class="nav-link dropdown-toggle font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          <span  th:text="${user.name}"></span><span><img style="width: 25px;height: 25px; margin-top: -4px;" class="img-fluid ml-1" th:src="@{'/images/' + ${user.imageUrl}}" alt=""></span>
+				<span  th:text="${user.name}"></span><span><img style="width: 25px;height: 25px; margin-top: -4px;" class="img-fluid ml-1" th:src="@{${user.imageUrl}}" alt=""></span> <!--old way th:src="@{'/images/' + ${user.imageUrl}}"-->
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 	          <!--<a class="dropdown-item font-weight-bold" th:text="${user.role}" href="#"></a>-->

@@ -46,7 +46,7 @@
 			  
 			  
               <div class="card-body media align-items-center">
-                <img th:src="@{'/images/' + ${user.imageUrl}}"  alt="" class="d-block ui-w-80">
+                <img th:src="@{${user.imageUrl}}"  alt="" class="d-block ui-w-80"> <!--old way th:src="@{'/images/' + ${user.imageUrl}}"-->
                 <div class="media-body ml-4">
                   <label class="btn btn-outline-primary">
                     Upload new photo

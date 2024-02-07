@@ -36,6 +36,9 @@ public class Contact implements Serializable{
 	@ManyToOne
 	private User user;
 
+
+	private String cloudinaryImgToken;
+
 	public Contact() {
 		super();
 	}
@@ -126,6 +129,15 @@ public class Contact implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getCloudinaryImgToken() {
+		return cloudinaryImgToken;
+	}
+
+
+	public void setCloudinaryImgToken(String cloudinaryImgToken) {
+		this.cloudinaryImgToken = cloudinaryImgToken;
 	}
 
 

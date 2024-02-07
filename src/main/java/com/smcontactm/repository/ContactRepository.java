@@ -10,6 +10,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.smcontactm.entities.Contact;
 
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 
 public interface ContactRepository  extends JpaRepository<Contact, Integer> {
 	
@@ -17,15 +20,16 @@ public interface ContactRepository  extends JpaRepository<Contact, Integer> {
 	@Query("select c from Contact c where c.user.id =:userId")
 	public List<Contact> findContactsByUser(@Param("userId") int userId);
 	
-	//added this repository to get pagination also Page is sublist of object returns page with contacts ,
-	//Pageable store pagination information conatains current page and per page contact
+	/**
+	 * added this repository to get pagination also Page is sublist of object returns page with contacts ,
+	 * Pageable store pagination information conatains current page and per page contact
+	 */
 	@Query("select c from Contact c where c.user.id =:userId")
 	public Page<Contact> findContactsByUserPagination(@Param("userId") int userId,Pageable pageable);
 	
 	
 	@Query("select count(*) from Contact c where c.user.id =:userId")
 	public int getCountContactsByUser(@Param("userId") int userId);
-	
-	
+
 
 }

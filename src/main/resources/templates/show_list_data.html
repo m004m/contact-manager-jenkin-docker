@@ -44,8 +44,8 @@
 			                <td th:if="${c}" class="title">
 			                  <div class="thumb">
 			                    <!--<img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">-->
-			                    
-			                    <img class="img-fluid" th:src="@{'/images/' + ${c.image}}" alt="">
+
+								  <img class="img-fluid" th:src="@{${c.image}}" alt=""> <!--old image th:src="@{'/images/' + ${c.image}}"-->
 			                    
 			                  </div>
 			                  <div class="candidate-list-details">

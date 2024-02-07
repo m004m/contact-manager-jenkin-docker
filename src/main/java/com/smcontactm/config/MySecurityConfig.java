@@ -79,7 +79,10 @@ public class MySecurityConfig   {
                 // .formLogin(login -> login.loginPage("/getLoginPage")).csrf(csrf -> csrf.disable());
                 .formLogin(login -> login
                                 .loginPage("/getLoginPage")
-                                .defaultSuccessUrl("/user/index")
+
+								//.loginProcessingUrl("/login")
+								//.defaultSuccessUrl("/login")
+								.defaultSuccessUrl("/user/index")
                 //.failureUrl("/login-fail")
                 )
 

@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/contact_manager
-    username: root
-    password: root
+    url: jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6683023
+    username: sql6683023
+    password: YZBD98wisx
   main:
     allow-bean-definition-overriding: true
 
@@ -35,7 +35,7 @@ okta:
     client-secret: VkKqe-mni7z4MbJhuECaV5Z19boQpVsRxgx7glIsW0TeQhhqWChemuaS2qx0AFdg
     issuer: https://dev-06098242.okta.com/oauth2/default
 
-
+#url: sql6.freemysqlhosting.net ##jdbc:mysql://localhost:3306/contact_manager
 #okta:
 #  oauth2:
 #    client:

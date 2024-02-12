@@ -1,7 +1,7 @@
 ##server.port=6400
 
-server:
-  port: 6400
+#server:
+  #port: 6400
 
 spring:
   datasource:

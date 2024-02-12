@@ -1,8 +1,8 @@
 ##server.port=6400
 
-#server:
-  #port: 6400
-#appliction port removed
+server:
+  port: 6410
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

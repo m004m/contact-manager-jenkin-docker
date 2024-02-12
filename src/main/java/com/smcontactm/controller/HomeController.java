@@ -116,10 +116,10 @@ public class HomeController {
 			userModel.setRole("ROLE_USER");
 			userModel.setEnabled(true);
 			userModel.setImageUrl("contact.png");
-			if(userModel.getCity().isEmpty() || userModel.getCity() == null) {
+			if(userModel.getCity() == null || userModel.getCity().isEmpty()) {
 				userModel.setCity("UNKNOWN");
 			}
-			if(userModel.getState().isEmpty() || userModel.getState() == null) {
+			if(userModel.getState() == null || userModel.getState().isEmpty() ) {
 				userModel.setState("UNKNOWN");
 			}
 			userModel.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));

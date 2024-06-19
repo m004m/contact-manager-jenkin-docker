@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: contact-manager-k8s
+spec:
+  selector:
+    matchLabels:
+      app: contact-manager-k8s
+  replicas: 2 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: contact-manager-k8s
+    spec:
+      containers:
+        - name: contact-manager-k8s
+          image: mahinishi/contact-manager-docker-jenkins:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6410 # The port that the container is running on in the cluster
+
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: contact-manager-k8s
+#spec:
+#  selector:
+#    matchLabels:
+#      app: contact-manager-k8s
+#  replicas: 3 #number of replicas that will created for this deployment
+#  template:
+#    metadata:
+#      labels:
+#        app: contact-manager-k8s
+#    spec:
+#      containers:
+#        - name:  contact-manager-k8s
+#          image: mahinishi/contact-manager-docker-jenkins:latest
+#          imagePullPolicy: IfNotPresent
+#          ports:
+#            - container: 6410 #port that container running on the cluster
+
+
+

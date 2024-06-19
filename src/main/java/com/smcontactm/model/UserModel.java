@@ -23,7 +23,8 @@ public class UserModel implements Serializable {
 	@NotBlank(message = "Name cannot be blank !!")
 	@Size(min = 2,max = 15, message = "Name must be 2 to 15 Charecters!!")
 	private String name;
-	
+
+	//user email validation check added
 	@Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",message = "Invalid email !!")
 	private String email;
 	

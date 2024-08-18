@@ -32,8 +32,8 @@ jobs:
 
     - name: SonarQube Scan
       run: mvn package sonar:sonar
-      with:
-        args: -Dsonar.projectKey=conatct-manger-sonar-integration -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#      with:
+#        args: -Dsonar.projectKey=conatct-manger-sonar-integration -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 #        -Dsonar.projectKey=conatct-manger-sonar-integration -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
     - name: Build & push Docker image

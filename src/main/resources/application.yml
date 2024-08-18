@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6683023
-    username: sql6683023
-    password: YZBD98wisx
+    url: jdbc:mysql://localhost:3306/contact_manager #jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6683023
+    username: root #sql6683023
+    password: root #YZBD98wisx
   main:
     allow-bean-definition-overriding: true
 
@@ -19,7 +19,7 @@ spring:
 
     properties:
       hibernate:
-        dialect : org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
   application:
     name: contact-manager

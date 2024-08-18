@@ -19,8 +19,8 @@
 		<sonar.projectKey>conatct-manger-sonar-integration</sonar.projectKey>
 		<sonar.projectName>conatct-manger-sonar-integration</sonar.projectName>
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
-<!--		<sonar.login>sqp_bdc6bffe152ea1aa58a8312bd15f42a5762faadc</sonar.login>-->
-		<sonar.login>${sonar.login}</sonar.login>
+		<sonar.login>sqp_bdc6bffe152ea1aa58a8312bd15f42a5762faadc</sonar.login>
+<!--		<sonar.login>${sonar.login}</sonar.login>-->
 <!--		<sonar.projectKey>${sonar.projectKey}</sonar.projectKey>-->
 <!--		<sonar.projectName>${sonar.projectName}</sonar.projectName>-->
 <!--		<sonar.host.url>${sonar.host.url}</sonar.host.url>-->
@@ -290,10 +290,10 @@
 			</activation>
 			<properties>
 				<!-- Optional URL to server. Default value is http://localhost:9000 -->
-				<sonar.projectKey>${sonar.projectKey}</sonar.projectKey>
-				<sonar.projectName>${sonar.projectName}</sonar.projectName>
-				<sonar.host.url>${sonar.host.url}</sonar.host.url>
-				<sonar.login>${sonar.login}</sonar.login>
+				<sonar.projectKey>conatct-manger-sonar-integration</sonar.projectKey>
+				<sonar.projectName>conatct-manger-sonar-integration</sonar.projectName>
+				<sonar.host.url>http://localhost:9000</sonar.host.url>
+				<sonar.login>sqp_bdc6bffe152ea1aa58a8312bd15f42a5762faadc</sonar.login>
 			</properties>
 		</profile>
 	</profiles>
